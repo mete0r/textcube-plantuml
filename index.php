@@ -2,8 +2,6 @@
 // TTML Formatter for Textcube 1.6
 // (C) 2004-2009 Needlworks / Tatter Network Foundation
 
-if(!function_exists('FM_TTML_bindAttachments')) require_once 'ttml.php';
-
 define('FM_PLANTUML_CACHE_DIR', ROOT.'/cache/PlantUML');
 require_once(dirname(__FILE__).DS.'config.php');
 

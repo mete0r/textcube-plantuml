@@ -1,0 +1,3 @@
+<?php
+define('FM_PLANTUML_JAR', '/usr/local/share/java/plantuml.jar');
+define('FM_PLANTUML_JAVA', '/usr/bin/java');

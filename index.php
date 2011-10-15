@@ -55,17 +55,39 @@ function FM_PlantUML_convert($content) {
 	return $view;
 }
 
+function FM_PlantUML_convert_to_svg_element($content) {
+	$svg = FM_PlantUML_convert($content);
+	$start = strpos($svg, '<svg');
+	if ($start !== false) {
+		$svg = substr($svg, $start);
+	}
+	return $svg;
+}
+
+function FM_PlantUML_transform($target) {
+	$output = '';
+	// TODO: use a XML parser/transformer
+	$start_sig = '<markup type="text/x-plantuml">';
+	while (preg_match("@$start_sig@", $target, $start_matches, PREG_OFFSET_CAPTURE)) {
+		$start_pos = $start_matches[0][1];
+		if (preg_match('@</markup>@', $target, $end_matches, PREG_OFFSET_CAPTURE, $start_pos)) {
+			$end_pos = $end_matches[0][1];
+			$output .= substr($target, 0, $start_pos);
+			$markup = substr($target, $start_pos+strlen($start_sig, $end_pos));
+			$svg = FM_PlantUML_convert_to_svg_element($markup);
+			$output .= $svg;
+			$target = substr($target, $end_pos+strlen('</markup>'));
+		}
+	}
+	$output .= $target;
+	return $output;
+}
+
 function FM_PlantUML_format($blogid, $id, $content, $keywords = array(), $useAbsolutePath = true, $bRssMode = false) {
 	global $service;
 	$path = ROOT . "/attach/$blogid";
 	$url = "{$service['path']}/attach/$blogid";
-	$view = FM_PlantUML_convert($content);
-
-	$start = strpos($view, '<svg');
-	if ($start !== false) {
-		$view = substr($view, $start);
-	}
-
+	$view = FM_PlantUML_transform($content);
 	return $view;
 }
 

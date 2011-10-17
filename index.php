@@ -65,9 +65,11 @@ function FM_PlantUML_convert($content) {
 
 function FM_PlantUML_convert_to_svg_element($content) {
 	$svg = FM_PlantUML_convert($content);
-	$start = strpos($svg, '<svg');
-	if ($start !== false) {
-		$svg = substr($svg, $start);
+	if ($svg != null) {
+		$start = strpos($svg, '<svg');
+		if ($start !== false) {
+			$svg = substr($svg, $start);
+		}
 	}
 	return $svg;
 }
@@ -83,7 +85,9 @@ function FM_PlantUML_transform($target) {
 			$output .= substr($target, 0, $start_pos);
 			$markup = substr($target, $start_pos+strlen($start_sig, $end_pos));
 			$svg = FM_PlantUML_convert_to_svg_element($markup);
-			$output .= $svg;
+			if ($svg != null) {
+				$output .= $svg;
+			}
 			$target = substr($target, $end_pos+strlen('</markup>'));
 		}
 	}

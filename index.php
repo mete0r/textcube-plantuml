@@ -37,22 +37,30 @@ function FM_PlantUML_readall($f) {
 	return $view;
 }
 
+function FM_PlantUML_convert_stream($stream) {
+	$proc = proc_open(
+		FM_PLANTUML_JAVA.' -jar '.FM_PLANTUML_JAR.' -p -tsvg -charset UTF-8',
+		array(0=>$stream, 1=>array('pipe', 'w')),
+		$pipes, null, null);
+	if (is_resource($proc)) {
+		$converted = FM_PlantUML_readall($pipes[1]);
+		fclose($pipes[1]);
+		proc_close($proc);
+	} else {
+		$converted = null;
+	}
+	return $converted;
+}
+
 function FM_PlantUML_convert($content) {
 	$tmpfile = FM_PlantUML_tmpfile($content);
 	if (is_resource($tmpfile)) {
-		$proc = proc_open(
-			FM_PLANTUML_JAVA.' -jar '.FM_PLANTUML_JAR.' -p -tsvg -charset UTF-8',
-			array(0=>$tmpfile, 1=>array('pipe', 'w')),
-			$pipes, null, null);
-		if (is_resource($proc)) {
-			$view = FM_PlantUML_readall($pipes[1]);
-			fclose($pipes[1]);
-			proc_close($proc);
-		}
+		$converted = FM_PlantUML_convert_stream($tmpfile);
 		fclose($tmpfile);
+	} else {
+		$converted = null;
 	}
-
-	return $view;
+	return $converted;
 }
 
 function FM_PlantUML_convert_to_svg_element($content) {

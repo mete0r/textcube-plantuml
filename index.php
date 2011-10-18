@@ -2,9 +2,10 @@
 // TTML Formatter for Textcube 1.6
 // (C) 2004-2009 Needlworks / Tatter Network Foundation
 
-define('FM_PLANTUML_CACHE_DIR', ROOT.'/cache/PlantUML');
 require_once(dirname(__FILE__).'/config.php');
 
+/*
+define('FM_PLANTUML_CACHE_DIR', ROOT.'/cache/PlantUML');
 function FM_PlantUML_get_cache_dir($subdir) {
 	if (!is_dir(FM_PLANTUML_CACHE_DIR)) {
 		@mkdir(FM_PLANTUML_CACHE_DIR);
@@ -17,6 +18,7 @@ function FM_PlantUML_get_cache_dir($subdir) {
 	}
 	return $path;
 }
+*/
 
 function FM_PlantUML_tmpfile($content) {
 	$f = tmpfile();
